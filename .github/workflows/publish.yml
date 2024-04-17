@@ -1,16 +1,27 @@
-on: [push]
+name: Publish
 
+on:
+  push:
+    branches: [ main ]
+    
 permissions:
   contents: write
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     name: Publish Logseq graph
     steps:
       - uses: actions/checkout@v3
-      - uses: logseq/publish-spa@v0.3.0
+      
+      - name: Logseq Publish
+        uses: logseq/publish-spa@main
+        with:
+          output-directory: www
+          accent-color: grass
+      
       - name: Add a nojekyll file # to make sure asset paths are correctly identified
         run: touch $GITHUB_WORKSPACE/www/.nojekyll
+        
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
